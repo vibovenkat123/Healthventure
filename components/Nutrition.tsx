@@ -1,7 +1,7 @@
 import styles from "../styles";
 import {View, Text, Pressable, Image, ScrollView} from "react-native";
 import React, {useState} from "react";
-import food from "../content/food";
+import getFood from "../content/food";
 import nutrition_styles from "./nutrition_styles";
 enum Page {
     INFO = 1,
@@ -44,6 +44,7 @@ function Game() {
     )
 }
 function Info(props: {setPage: React.Dispatch<React.SetStateAction<Page>>}) {
+    const food = getFood()
     const food_items = food.map((item, index) => {
         return (
             <View accessible={true} key={index} style={nutrition_styles.infoContainer}>
