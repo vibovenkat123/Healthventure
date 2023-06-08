@@ -48,7 +48,7 @@ function Info(props: { setPage: React.Dispatch<React.SetStateAction<Page>> }) {
         return (
             <View accessible={true} key={index} style={nutrition_styles.infoContainer}>
                 <Text style={{ ...styles.baseText, ...styles.regularText }}>{item.name}</Text>
-                {item.good ? <Text style={nutrition_styles.foodIsHealthy} accessibilityLabel={"is Healthy"}>✅</Text> : <Text style={nutrition_styles.foodIsHealthy} accessibilityLabel={"is Unhealthy"}>❌</Text>}
+                {item.good ? <Text style={nutrition_styles.foodIsHealthy} accessibilityLabel={"are  Good"}>✅</Text> : <Text style={nutrition_styles.foodIsHealthy} accessibilityLabel={"are not good"}>❌</Text>}
             </View>
         )
     })
