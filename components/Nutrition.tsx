@@ -175,7 +175,9 @@ function SelectCategoryGame(props: {
     return (
       <View key={index} style={[styles.container, styles.bg, { width: 300 }]}>
         <Title>{category.name}</Title>
-        <RegularText style={{ margin: 20 }}>Select the best food choice</RegularText>
+        <RegularText style={{ margin: 20 }}>
+          Select the best food choice
+        </RegularText>
         <DropDownPicker
           open={open}
           value={value}
