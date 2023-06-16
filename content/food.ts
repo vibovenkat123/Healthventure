@@ -2,10 +2,12 @@ type GoodBad = {
   name: string;
   good: boolean;
 };
+
 type Info = {
   good_bad: GoodBad[];
   food: Food[];
 };
+
 type Category = {
   name: string;
 };
@@ -27,6 +29,7 @@ export const categories: Category[] = [
   { name: "Protein" },
   { name: "Grains" },
   { name: "Dairy" },
+  { name: "Fruits" },
 ];
 
 export enum FoodCategory {
@@ -34,44 +37,9 @@ export enum FoodCategory {
   PROTEIN = 1,
   GRAINS = 2,
   DAIRY = 3,
+  FRUITS = 4,
 }
-/*
-DETAILS:
 
-Fruits:
-
-Options:
-
-Sliced fruit(2pts)
-Fruit Pie(1pt)
-Fruit gummies(0pt)
-
-
-Vegetables:
-
-Veggie Salad(2pts)
-Veggie Straws(1pts)
-Onion rings(0pts)
-
-Protein:
-
-Fish/seafood (2pts)
-Chicken legs/wings (1pts)
-Fried meat/mcdonalds (0pts)
-
-Grains:
-
-Whole wheat bread(2pts)
-Croissant(1pt)
-Frosted Flakes(0pts)
-
-Dairy: 
-
-Smoothies(2pts)
-Milkshakes(1pt)
-Coca cola(0pt)
-
-*/
 const info: Info = {
   good_bad: [
     { name: "Protein", good: true },
@@ -86,17 +54,17 @@ const info: Info = {
     {
       name: "Sliced fruit",
       points: PointType.GOOD,
-      category: FoodCategory.VEGETABLES,
+      category: FoodCategory.FRUITS,
     },
     {
       name: "Fruit Pie",
       points: PointType.OK,
-      category: FoodCategory.VEGETABLES,
+      category: FoodCategory.FRUITS,
     },
     {
       name: "Fruit gummies",
       points: PointType.BAD,
-      category: FoodCategory.VEGETABLES,
+      category: FoodCategory.FRUITS,
     },
     {
       name: "Veggie Salad",

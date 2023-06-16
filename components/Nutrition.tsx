@@ -1,12 +1,13 @@
 import styles from "../styles";
 import { View, Text, Pressable, Image, ScrollView } from "react-native";
-import React, { useState } from "react";
+import React, { Dispatch, useState } from "react";
 import info, { categories, FoodCategory } from "../content/food";
 import nutrition_styles from "./nutrition_styles";
 import DropDownPicker from "react-native-dropdown-picker";
 import SubtitleText from "./building_blocks/Subtitle";
 import RegularText from "./building_blocks/RegularText";
 import Title from "./building_blocks/Title";
+import Btn from "./building_blocks/Btn";
 
 enum Page {
   INFO = 1,
@@ -20,7 +21,7 @@ export default function HealthyFood() {
 }
 
 function DefaultWaiting(props: {
-  setStarted: React.Dispatch<React.SetStateAction<boolean>>;
+  setStarted: Dispatch<React.SetStateAction<boolean>>;
 }) {
   return (
     <View
@@ -37,15 +38,11 @@ function DefaultWaiting(props: {
         style={{ width: 100, height: 100, marginBottom: 30 }}
       />
       <SubtitleText>Nutrition Game</SubtitleText>
-      <Pressable style={styles.ctaBtn} onPress={() => props.setStarted(true)}>
-        <Text
-          style={{ ...styles.baseText, ...styles.regularText }}
-          accessible={true}
-          accessibilityLabel={"Start the nutrition game"}
-        >
+      <Btn onPress={() => props.setStarted(true)}>
+        <RegularText accessibilityLabel={"Start the nutrition game"}>
           Start
-        </Text>
-      </Pressable>
+        </RegularText>
+      </Btn>
     </View>
   );
 }
@@ -60,7 +57,7 @@ function Game() {
 
 function renderGamePage(
   page: Page,
-  setPage: React.Dispatch<React.SetStateAction<Page>>
+  setPage: Dispatch<React.SetStateAction<Page>>
 ) {
   switch (page) {
     case Page.INFO:
@@ -70,7 +67,7 @@ function renderGamePage(
   }
 }
 
-function Info(props: { setPage: React.Dispatch<React.SetStateAction<Page>> }) {
+function Info(props: { setPage: Dispatch<React.SetStateAction<Page>> }) {
   const food_items = info.good_bad.map((item, index) => {
     return (
       <View
@@ -78,9 +75,7 @@ function Info(props: { setPage: React.Dispatch<React.SetStateAction<Page>> }) {
         key={index}
         style={nutrition_styles.infoContainer}
       >
-        <Text style={{ ...styles.baseText, ...styles.regularText }}>
-          {item.name}
-        </Text>
+        <RegularText>{item.name}</RegularText>
         {item.good ? (
           <Text
             style={nutrition_styles.foodIsHealthy}
@@ -121,27 +116,26 @@ function Info(props: { setPage: React.Dispatch<React.SetStateAction<Page>> }) {
         }}
       >
         {rows}
-        <Pressable
-          style={[styles.ctaBtn, { marginBottom: 40 }]}
+        <Btn
+          style={{ marginBottom: 40 }}
           accessibilityLabel="Go to the next category section"
           onPress={() => props.setPage(Page.CATEGORY)}
         >
           <RegularText>Start</RegularText>
-        </Pressable>
+        </Btn>
       </ScrollView>
     </>
   );
 }
 
-function shuffle(array) {
-  let currentIndex = array.length,
-    randomIndex;
+function shuffle(array: any[]) {
+  let randomIndex: number = 0;
+  let currentIndex = array.length;
 
   while (currentIndex != 0) {
     randomIndex = Math.floor(Math.random() * currentIndex);
     currentIndex--;
 
-    // And swap it with the current element.
     [array[currentIndex], array[randomIndex]] = [
       array[randomIndex],
       array[currentIndex],
@@ -152,26 +146,49 @@ function shuffle(array) {
 }
 
 function SelectCategoryGame(props: {
-  setPage: React.Dispatch<React.SetStateAction<Page>>;
+  setPage: Dispatch<React.SetStateAction<Page>>;
 }) {
-  const food = shuffle(info.food);
   const [open, setOpen] = useState(false);
-  const [value, setValue] = useState(food[0].name);
   const [idx, setIdx] = useState(0);
   const [total, setTotal] = useState(0);
   const [vegTotal, setVegTotal] = useState(0);
   const [protienTotal, setProtienTotal] = useState(0);
   const [grainTotal, setGrainTotal] = useState(0);
   const [dairyTotal, setDairyTotal] = useState(0);
-  const [items, setItems] = useState(
-    food.map((item) => {
-      return {
-        label: item.name,
-        value: item.name,
-      };
-    })
-  );
+  const [fruitTotal, setFruitTotal] = useState(0);
+  type Total = {
+    total: number;
+    setTotal: Dispatch<React.SetStateAction<number>>;
+  };
+  const totals = [
+    { total: vegTotal, setTotal: setVegTotal },
+    { total: protienTotal, setTotal: setProtienTotal },
+    { total: grainTotal, setTotal: setGrainTotal },
+    { total: dairyTotal, setTotal: setDairyTotal },
+    { total: fruitTotal, setTotal: setFruitTotal },
+  ];
+  const food = shuffle(info.food);
+  function SubmitCategory(index: number, value: string) {
+    setIdx(idx + 1);
+    setOpen(false);
+    const item = food.find((item) => item.name === value)!;
+    if (item.category === index) {
+      setTotal(total + item.points);
+      totals[item.category].setTotal(totals[item.category].total + item.points);
+    }
+  }
   const categoriesView = categories.map((category, index) => {
+    const [items, setItems] = useState(
+      food
+        .filter((item) => item.category === index)
+        .map((item) => {
+          return {
+            label: item.name,
+            value: item.name,
+          };
+        })
+    );
+    const [value, setValue] = useState(items[0].label);
     return (
       <View key={index} style={[styles.container, styles.bg, { width: 300 }]}>
         <Title>{category.name}</Title>
@@ -186,41 +203,17 @@ function SelectCategoryGame(props: {
           setValue={setValue}
           setItems={setItems}
         />
-        <Pressable
-          style={[styles.ctaBtn, { marginTop: 40 }]}
+        <Btn
+          style={{ marginTop: 40 }}
           accessibilityLabel={
             index == categories.length - 1 ? "See total" : "Submit category"
           }
-          onPress={() => {
-            setIdx(idx + 1);
-            setOpen(false);
-            const item = food.find((item) => item.name === value)!;
-            if (item.category === index) {
-              setTotal(total + item.points);
-              switch (item.category) {
-                case 0:
-                  console.log(index);
-                  setVegTotal(vegTotal + item.points);
-                  break;
-                case 1:
-                  setProtienTotal(protienTotal + item.points);
-                  break;
-                case 2:
-                  setGrainTotal(grainTotal + item.points);
-                  break;
-                case 3:
-                  setDairyTotal(dairyTotal + item.points);
-                  break;
-                default:
-                  break;
-              }
-            }
-          }}
+          onPress={() => SubmitCategory(index, value)}
         >
           <RegularText>
             {index == categories.length - 1 ? "Total" : "Submit"}
           </RegularText>
-        </Pressable>
+        </Btn>
       </View>
     );
   });
@@ -228,7 +221,7 @@ function SelectCategoryGame(props: {
     <>
       {idx == categories.length ? (
         <TotalView
-          total={total}
+          fruitTotal={fruitTotal}
           vegTotal={vegTotal}
           proteinTotal={protienTotal}
           grainTotal={grainTotal}
@@ -242,20 +235,26 @@ function SelectCategoryGame(props: {
 }
 
 function TotalView(props: {
-  total: number;
   vegTotal: number;
   proteinTotal: number;
   grainTotal: number;
   dairyTotal: number;
+  fruitTotal: number;
 }) {
+  const total =
+    props.vegTotal +
+    props.proteinTotal +
+    props.grainTotal +
+    props.dairyTotal +
+    props.fruitTotal;
   return (
     <View style={[styles.container, styles.bg]}>
       <Title>Score</Title>
       <SubtitleText style={{ marginTop: 20 }}>
-        Your score is {props.total.toString()}/{categories.length * 2}
+        Your score is {total.toString()}/{categories.length * 2}
       </SubtitleText>
       <SubtitleText style={{ margin: 20 }}>
-        That is {((props.total / (categories.length * 2)) * 100).toFixed(2)}%
+        That is {((total / (categories.length * 2)) * 100).toFixed(2)}%
       </SubtitleText>
       <RegularText>Vegetables: {props.vegTotal.toString()}</RegularText>
       <RegularText>Protein: {props.proteinTotal.toString()}</RegularText>
