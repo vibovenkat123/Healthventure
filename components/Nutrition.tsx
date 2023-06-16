@@ -38,6 +38,15 @@ function DefaultWaiting(props: {
         style={{ width: 100, height: 100, marginBottom: 30 }}
       />
       <SubtitleText>Nutrition Game</SubtitleText>
+      <RegularText
+        style={{
+          textAlign: "center",
+          marginTop: 20,
+          marginBottom: 20,
+        }}
+      >
+        Pick the right healthy foods to gain points
+      </RegularText>
       <Btn onPress={() => props.setStarted(true)}>
         <RegularText accessibilityLabel={"Start the nutrition game"}>
           Start
@@ -180,7 +189,6 @@ function SelectCategoryGame(props: {
   const categoriesView = categories.map((category, index) => {
     const [items, setItems] = useState(
       food
-        .filter((item) => item.category === index)
         .map((item) => {
           return {
             label: item.name,
