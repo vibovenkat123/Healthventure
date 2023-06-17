@@ -1,10 +1,9 @@
-import styles from "./styles";
-import { Button, Pressable, Text, View } from "react-native";
 import Home from "./components/Home";
 import Nutrition from "./components/Nutrition";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Outbreak from "./components/Outbreak";
+import Hygiene from "./components/Hygiene";
 const Stack = createNativeStackNavigator();
 export default function App() {
   return (
@@ -13,6 +12,7 @@ export default function App() {
         <Stack.Screen name={"Home"} component={Home} />
         <Stack.Screen name={"Nutrition"} component={Nutrition} />
         <Stack.Screen name={"Outbreak"} component={Outbreak} />
+        <Stack.Screen name={"Hygiene"} component={Hygiene} />
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -8,13 +8,13 @@ import SubtitleText from "./building_blocks/Subtitle";
 import RegularText from "./building_blocks/RegularText";
 import Title from "./building_blocks/Title";
 import Btn from "./building_blocks/Btn";
-
 enum Page {
   INFO = 1,
   CATEGORY,
   REVIEW,
   SCORE,
 }
+
 export default function HealthyFood() {
   const [started, setStarted] = useState(false);
   return !started ? <DefaultWaiting setStarted={setStarted} /> : <Game />;
@@ -75,7 +75,8 @@ function renderGamePage(
       return <SelectCategoryGame setPage={setPage} />;
   }
 }
-
+function Test(props: { test: string }) {
+}
 function Info(props: { setPage: Dispatch<React.SetStateAction<Page>> }) {
   const food_items = info.good_bad.map((item, index) => {
     return (
@@ -234,6 +235,7 @@ function SelectCategoryGame(props: {
           proteinTotal={protienTotal}
           grainTotal={grainTotal}
           dairyTotal={dairyTotal}
+          setPage={props.setPage}
         />
       ) : (
         categoriesView[idx]
@@ -248,6 +250,7 @@ function TotalView(props: {
   grainTotal: number;
   dairyTotal: number;
   fruitTotal: number;
+  setPage: Dispatch<React.SetStateAction<Page>>;
 }) {
   const total =
     props.vegTotal +
@@ -268,6 +271,15 @@ function TotalView(props: {
       <RegularText>Protein: {props.proteinTotal.toString()}</RegularText>
       <RegularText>Grain: {props.grainTotal.toString()}</RegularText>
       <RegularText>Dairy: {props.dairyTotal.toString()}</RegularText>
+      <Btn
+          onPress={() => props.setPage(Page.INFO)}
+      >
+        <RegularText
+          accessibilityLabel="Try again"
+        >
+          Try again
+        </RegularText>
+      </Btn>
     </View>
   );
 }

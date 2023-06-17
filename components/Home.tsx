@@ -24,6 +24,15 @@ export default function Home({ navigation }) {
       >
         <RegularText>🦠 Outbreak</RegularText>
       </Btn>
+      <Btn
+        accessibilityLabel={"Begin the hygiene game"}
+        onPress={() => navigation.navigate("Hygiene")}
+        accessibilityHint={
+          "Start the new hygiene game, learn healthy hygiene habits"
+        }
+      >
+        <RegularText>🧼 Hygiene</RegularText>
+      </Btn>
     </View>
   );
 }
