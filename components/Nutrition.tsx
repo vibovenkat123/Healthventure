@@ -9,6 +9,7 @@ import RegularText from "./building_blocks/RegularText";
 import Title from "./building_blocks/Title";
 import Btn from "./building_blocks/Btn";
 import { shuffle } from "../src/helpers";
+import { usePointStore } from "../src/storage";
 enum Page {
   INFO = 1,
   CATEGORY,
@@ -244,6 +245,8 @@ function TotalView(props: {
     props.grainTotal +
     props.dairyTotal +
     props.fruitTotal;
+  const increase = usePointStore((state) => state.increase);
+  increase(total)
   return (
     <View style={[styles.container, styles.bg]}>
       <Title>Score</Title>

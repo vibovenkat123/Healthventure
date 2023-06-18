@@ -3,26 +3,22 @@ import styles from "../styles";
 import RegularText from "./building_blocks/RegularText";
 import Title from "./building_blocks/Title";
 import Btn from "./building_blocks/Btn";
+import { usePointStore } from "../src/storage";
 
 export default function Home({ navigation }) {
+  const points = usePointStore((state) => state.points);
   return (
     <View style={{ ...styles.container, ...styles.bg }}>
       <Title>Healthventure</Title>
+      <RegularText style={{ marginTop: 30 }}>
+        You have {points} wellness points
+      </RegularText>
       <Btn
         accessibilityLabel={"Begin the nutrition game"}
         accessibilityHint="Start the new nutrition game, pick the right healthy foods to gain points"
         onPress={() => navigation.navigate("Nutrition")}
       >
         <RegularText>🍱 Nutrition</RegularText>
-      </Btn>
-      <Btn
-        accessibilityLabel={"Begin the outbreak game"}
-        onPress={() => navigation.navigate("Outbreak")}
-        accessibilityHint={
-          "Start the new outbreak game, help identify people who are sick and quickly quarantine them"
-        }
-      >
-        <RegularText>🦠 Outbreak</RegularText>
       </Btn>
       <Btn
         accessibilityLabel={"Begin the hygiene game"}
@@ -32,6 +28,15 @@ export default function Home({ navigation }) {
         }
       >
         <RegularText>🧼 Hygiene</RegularText>
+      </Btn>
+      <Btn
+        accessibilityLabel={"Learn more about Healthventure"}
+        onPress={() => navigation.navigate("About")}
+        accessibilityHint={
+          "Learn about the game mechanics and the team behind Healthventure"
+        }
+      >
+        <RegularText>📘 About</RegularText>
       </Btn>
     </View>
   );

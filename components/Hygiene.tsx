@@ -12,6 +12,7 @@ import quiz, {
 } from "../content/hygienequiz";
 import { DraxList, DraxProvider } from "react-native-drax";
 import { shuffle } from "../src/helpers";
+import { usePointStore } from "../src/storage";
 enum Page {
   HOME = 1,
   BRUSH,
@@ -47,14 +48,19 @@ function Hygiene(props: {
       <View style={{ ...styles.container, ...styles.bg, flex: 1 }}>
         <Title>Hygiene</Title>
         <SubtitleText style={{ marginTop: 30 }}>Select a game</SubtitleText>
-        <Btn onPress={() => props.setPage(Page.BRUSH)}>
+        <Btn
+          onPress={() => props.setPage(Page.BRUSH)}
+          accessibilityLabel="Play the brushing teeth game"
+        >
           <RegularText>🦷 Brush Teeth</RegularText>
         </Btn>
         <Btn
           onPress={() => props.setPage(Page.WASH)}
           style={{ display: "flex" }}
         >
-          <RegularText>🧼 Wash Hands</RegularText>
+          <RegularText accessibilityLabel="Play the washing hands game">
+            🧼 Wash Hands
+          </RegularText>
         </Btn>
       </View>
     );
@@ -150,7 +156,11 @@ function Brush(props: { setPage: Dispatch<React.SetStateAction<Page>> }) {
       {question != quiz.brush.length ? (
         quizElems[question]
       ) : (
-        <TotalView points={points} setPage={props.setPage} length={quiz.brush.length}/>
+        <TotalView
+          points={points}
+          setPage={props.setPage}
+          length={quiz.brush.length}
+        />
       )}
     </View>
   );
@@ -161,6 +171,8 @@ function TotalView(props: {
   setPage: Dispatch<React.SetStateAction<Page>>;
   length: number;
 }) {
+  const increase = usePointStore((state) => state.increase);
+  increase(props.points)
   return (
     <View
       style={{
@@ -175,8 +187,8 @@ function TotalView(props: {
         You got {props.points} out of {props.length} correct!
       </SubtitleText>
       <RegularText style={{ textAlign: "center", marginTop: 20 }}>
-        That is {Math.round((props.points / props.length) * 100)}% of
-        questions correct!
+        That is {Math.round((props.points / props.length) * 100)}% of questions
+        correct!
       </RegularText>
       <Btn onPress={() => props.setPage(Page.HOME)} style={{ width: "100%" }}>
         <RegularText>Go back to the hygiene page</RegularText>
@@ -187,52 +199,65 @@ function TotalView(props: {
 
 // wash hands
 function Wash(props: { setPage: Dispatch<React.SetStateAction<Page>> }) {
-  const [total, setTotal] = useState(0)
+  const [total, setTotal] = useState(0);
   const [isEnded, setIsEnded] = useState(false);
   return (
-    <View style={{...styles.container, ...styles.bg, flex: 1}}>
-      {isEnded ? <TotalView points={total} length={quiz.handwash.length} setPage={props.setPage}/>: <WashOrder total={total} setTotal={setTotal} setIsEnded={setIsEnded}/>}
+    <View style={{ ...styles.container, ...styles.bg, flex: 1 , paddingTop: 30}}>
+      <SubtitleText style={{textAlign: "center"}}>Drag the items to the correct order for washing your hands!</SubtitleText>
+      {isEnded ? (
+        <TotalView
+          points={total}
+          length={quiz.handwash.length}
+          setPage={props.setPage}
+        />
+      ) : (
+        <WashOrder total={total} setTotal={setTotal} setIsEnded={setIsEnded} />
+      )}
     </View>
-  )
+  );
 }
-function WashOrder(props: {total: number, setTotal: Dispatch<React.SetStateAction<number>>, setIsEnded: Dispatch<React.SetStateAction<boolean>>}) {
+function WashOrder(props: {
+  total: number;
+  setTotal: Dispatch<React.SetStateAction<number>>;
+  setIsEnded: Dispatch<React.SetStateAction<boolean>>;
+}) {
   const [orderData, setOrderData] = useState(shuffle(quiz.handwash));
-    return (
-      <DraxProvider style={{ flex: 1 }}>
-        <View
-          style={[styles.container, styles.bg, { flex: 1 }, { paddingTop: 50 }]}
-        >
-          <Btn
-            onPress={() => {
-              let points = 0;
-              for (let i = 0; i < orderData.length; i++) {
-                if (orderData[i].id == correctHandwashOrder[i]) {
-                  points++;
-                }
+  return (
+    <DraxProvider style={{ flex: 1 }}>
+      <View
+        style={[styles.container, styles.bg, { flex: 1 }, { paddingTop: 50 }]}
+      >
+        <Btn
+          onPress={() => {
+            let points = 0;
+            for (let i = 0; i < orderData.length; i++) {
+              if (orderData[i].id == correctHandwashOrder[i]) {
+                points++;
               }
-              props.setTotal(points);
-              props.setIsEnded(true);
-            }}
-          >
-            <RegularText>Submit</RegularText>
-          </Btn>
-          <DraxList
-            data={orderData}
-            style={{ width: "100%", padding: 30 }}
-            renderItemContent={({ item, index }) => (
-              <Btn key={item.id} style={{ width: "100%" }}>
-                <SubtitleText>{item.emoji}</SubtitleText>
-                <RegularText>{item.text}</RegularText>
-              </Btn>
-            )}
-            onItemReorder={({ fromIndex, toIndex }) => {
-              const newData = orderData.slice();
-              newData.splice(toIndex, 0, newData.splice(fromIndex, 1)[0]);
-              setOrderData(newData);
-            }}
-            keyExtractor={(item) => item.id.toString()}
-          ></DraxList>
-        </View>
-      </DraxProvider>
-    );
+            }
+            props.setTotal(points);
+            props.setIsEnded(true);
+          }}
+        >
+          <RegularText>Submit</RegularText>
+        </Btn>
+        <DraxList
+          data={orderData}
+          style={{ width: "100%", padding: 30, marginBottom: 30}}
+          renderItemContent={({ item, index }) => (
+            <Btn key={item.id} style={{ width: "100%" }}>
+              <SubtitleText>{item.emoji}</SubtitleText>
+              <RegularText>{item.text}</RegularText>
+            </Btn>
+          )}
+          onItemReorder={({ fromIndex, toIndex }) => {
+            const newData = orderData.slice();
+            newData.splice(toIndex, 0, newData.splice(fromIndex, 1)[0]);
+            setOrderData(newData);
+          }}
+          keyExtractor={(item) => item.id.toString()}
+        ></DraxList>
+      </View>
+    </DraxProvider>
+  );
 }
