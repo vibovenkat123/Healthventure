@@ -134,7 +134,6 @@ function Brush(props: { setPage: Dispatch<React.SetStateAction<Page>> }) {
         ...styles.container,
         ...styles.bg,
         flex: 1,
-        marginTop: 20,
         padding: 20,
       }}
     >
@@ -165,6 +164,9 @@ function TotalView(props: {
       <SubtitleText style={{ textAlign: "center" }}>
         You got {props.points} out of {quiz.brush.length} correct!
       </SubtitleText>
+      <RegularText style={{ textAlign: "center", marginTop: 20}}>
+        That is {Math.round((props.points / quiz.brush.length) * 100)}% of questions correct!
+      </RegularText>
       <Btn onPress={() => props.setPage(Page.HOME)} style={{width: "100%"}}>
         <RegularText>Go back to the hygiene page</RegularText>
       </Btn>

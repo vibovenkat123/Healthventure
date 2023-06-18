@@ -47,7 +47,7 @@ const quiz: Quiz = {
       options: [
         { id: 1, text: 'Yes' },
         { id: 2, text: 'No' },
-        { id: 3, text: 'Notat all' },
+        { id: 3, text: 'Not at all' },
       ],
       answer: 1,
     },
@@ -59,7 +59,25 @@ const quiz: Quiz = {
         { id: 3, text: 'Never' },
       ],
       answer: 1,
+    },
+    {
+      question: "What is the best way to brush your teeth?",
+      options: [
+        { id: 1, text: 'Up and down' },
+        { id: 2, text: 'Side to side' },
+        { id: 3, text: 'Circular motions' },
+      ],
+      answer: 3,
+    },
+    {
+      question: "How long should you use mouthwash?",
+      options: [
+        { id: 1, text: '30 seconds' },
+        { id: 2, text: '2 minutes' },
+        { id: 3, text: '1 minute' },
+      ],
+      answer: 1,
     }
-  ]
+  ],
 }
 export default quiz
