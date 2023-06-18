@@ -5,7 +5,13 @@ import { Dispatch, useState } from "react";
 import Title from "./building_blocks/Title";
 import SubtitleText from "./building_blocks/Subtitle";
 import Btn from "./building_blocks/Btn";
-import quiz, { Option, QuizItem } from "../content/hygienequiz";
+import quiz, {
+  Option,
+  QuizItem,
+  correctHandwashOrder,
+} from "../content/hygienequiz";
+import { DraxList, DraxProvider } from "react-native-drax";
+import { shuffle } from "../src/helpers";
 enum Page {
   HOME = 1,
   BRUSH,
@@ -23,10 +29,10 @@ function RenderPage(
     case Page.BRUSH:
       return <Brush setPage={setPage} />;
     case Page.WASH:
+      return <Wash setPage={setPage} />;
     case Page.SKIN:
   }
 }
-
 export default function Home() {
   const [page, setPage] = useState<Page>(Page.HOME);
   return RenderPage(page, setPage);
@@ -58,6 +64,7 @@ function Hygiene(props: {
 function GenOptions(props: {
   quizItem: QuizItem;
   options: Option[];
+  idx: number;
   setPoints: Dispatch<React.SetStateAction<number>>;
   points: number;
   setQuestion: Dispatch<React.SetStateAction<number>>;
@@ -80,6 +87,7 @@ function GenOptions(props: {
               "Incorrect!",
               `The correct answer was:
 ${props.quizItem.options[props.quizItem.answer - 1].text}
+${quiz.brush[props.idx].reason ? "\n" + quiz.brush[props.idx].reason : ""}
             `,
               [
                 {
@@ -102,7 +110,7 @@ ${props.quizItem.options[props.quizItem.answer - 1].text}
 function Brush(props: { setPage: Dispatch<React.SetStateAction<Page>> }) {
   const [points, setPoints] = useState(0);
   const [question, setQuestion] = useState(0);
-  const quizElems = quiz.brush.map((item) => {
+  const quizElems = quiz.brush.map((item, index) => {
     return (
       <View
         style={{
@@ -124,6 +132,7 @@ function Brush(props: { setPage: Dispatch<React.SetStateAction<Page>> }) {
           points: points,
           setQuestion: setQuestion,
           question: question,
+          idx: index,
         })}
       </View>
     );
@@ -141,7 +150,7 @@ function Brush(props: { setPage: Dispatch<React.SetStateAction<Page>> }) {
       {question != quiz.brush.length ? (
         quizElems[question]
       ) : (
-        <TotalView points={points} setPage={props.setPage} />
+        <TotalView points={points} setPage={props.setPage} length={quiz.brush.length}/>
       )}
     </View>
   );
@@ -150,6 +159,7 @@ function Brush(props: { setPage: Dispatch<React.SetStateAction<Page>> }) {
 function TotalView(props: {
   points: number;
   setPage: Dispatch<React.SetStateAction<Page>>;
+  length: number;
 }) {
   return (
     <View
@@ -162,14 +172,67 @@ function TotalView(props: {
       }}
     >
       <SubtitleText style={{ textAlign: "center" }}>
-        You got {props.points} out of {quiz.brush.length} correct!
+        You got {props.points} out of {props.length} correct!
       </SubtitleText>
-      <RegularText style={{ textAlign: "center", marginTop: 20}}>
-        That is {Math.round((props.points / quiz.brush.length) * 100)}% of questions correct!
+      <RegularText style={{ textAlign: "center", marginTop: 20 }}>
+        That is {Math.round((props.points / props.length) * 100)}% of
+        questions correct!
       </RegularText>
-      <Btn onPress={() => props.setPage(Page.HOME)} style={{width: "100%"}}>
+      <Btn onPress={() => props.setPage(Page.HOME)} style={{ width: "100%" }}>
         <RegularText>Go back to the hygiene page</RegularText>
       </Btn>
     </View>
   );
+}
+
+// wash hands
+function Wash(props: { setPage: Dispatch<React.SetStateAction<Page>> }) {
+  const [total, setTotal] = useState(0)
+  const [isEnded, setIsEnded] = useState(false);
+  return (
+    <View style={{...styles.container, ...styles.bg, flex: 1}}>
+      {isEnded ? <TotalView points={total} length={quiz.handwash.length} setPage={props.setPage}/>: <WashOrder total={total} setTotal={setTotal} setIsEnded={setIsEnded}/>}
+    </View>
+  )
+}
+function WashOrder(props: {total: number, setTotal: Dispatch<React.SetStateAction<number>>, setIsEnded: Dispatch<React.SetStateAction<boolean>>}) {
+  const [orderData, setOrderData] = useState(shuffle(quiz.handwash));
+    return (
+      <DraxProvider style={{ flex: 1 }}>
+        <View
+          style={[styles.container, styles.bg, { flex: 1 }, { paddingTop: 50 }]}
+        >
+          <Btn
+            onPress={() => {
+              let points = 0;
+              for (let i = 0; i < orderData.length; i++) {
+                if (orderData[i].id == correctHandwashOrder[i]) {
+                  points++;
+                }
+              }
+              props.setTotal(points);
+              props.setIsEnded(true);
+            }}
+          >
+            <RegularText>Submit</RegularText>
+          </Btn>
+          <DraxList
+            data={orderData}
+            style={{ width: "100%", padding: 30 }}
+            renderItemContent={({ item, index }) => (
+              <Btn key={item.id} style={{ width: "100%" }}>
+                <SubtitleText>{item.emoji}</SubtitleText>
+                <RegularText>{item.text}</RegularText>
+              </Btn>
+            )}
+            onItemReorder={({ fromIndex, toIndex }) => {
+              const newData = orderData.slice();
+              newData.splice(toIndex, 0, newData.splice(fromIndex, 1)[0]);
+              setOrderData(newData);
+            }}
+            keyExtractor={(item) => item.id.toString()}
+          ></DraxList>
+        </View>
+      </DraxProvider>
+    );
 }

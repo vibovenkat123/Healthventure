@@ -8,6 +8,7 @@ import SubtitleText from "./building_blocks/Subtitle";
 import RegularText from "./building_blocks/RegularText";
 import Title from "./building_blocks/Title";
 import Btn from "./building_blocks/Btn";
+import { shuffle } from "../src/helpers";
 enum Page {
   INFO = 1,
   CATEGORY,
@@ -138,22 +139,7 @@ function Info(props: { setPage: Dispatch<React.SetStateAction<Page>> }) {
   );
 }
 
-function shuffle(array: any[]) {
-  let randomIndex: number = 0;
-  let currentIndex = array.length;
 
-  while (currentIndex != 0) {
-    randomIndex = Math.floor(Math.random() * currentIndex);
-    currentIndex--;
-
-    [array[currentIndex], array[randomIndex]] = [
-      array[randomIndex],
-      array[currentIndex],
-    ];
-  }
-
-  return array;
-}
 
 function SelectCategoryGame(props: {
   setPage: Dispatch<React.SetStateAction<Page>>;
