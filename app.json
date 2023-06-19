@@ -16,7 +16,8 @@
     ],
     "ios": {
       "supportsTablet": false,
-      "bundleIdentifier": "com.vaibhavvvenkat.healthventure"
+      "bundleIdentifier": "com.vaibhavvvenkat.healthventure",
+      "buildNumber": "2"
     },
     "android": {
       "adaptiveIcon": {
