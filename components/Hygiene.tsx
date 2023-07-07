@@ -1,4 +1,4 @@
-import { View, Alert } from "react-native";
+import { View, Alert, Text, Button } from "react-native";
 import styles from "../styles";
 import RegularText from "./building_blocks/RegularText";
 import { Dispatch, useState } from "react";
@@ -172,7 +172,7 @@ function TotalView(props: {
   length: number;
 }) {
   const increase = usePointStore((state) => state.increase);
-  increase(props.points)
+  increase(props.points);
   return (
     <View
       style={{
@@ -202,8 +202,12 @@ function Wash(props: { setPage: Dispatch<React.SetStateAction<Page>> }) {
   const [total, setTotal] = useState(0);
   const [isEnded, setIsEnded] = useState(false);
   return (
-    <View style={{ ...styles.container, ...styles.bg, flex: 1 , paddingTop: 30}}>
-      <SubtitleText style={{textAlign: "center"}}>Drag the items to the correct order for washing your hands!</SubtitleText>
+    <View
+      style={{ ...styles.container, ...styles.bg, flex: 1, paddingTop: 30 }}
+    >
+      <SubtitleText style={{ textAlign: "center" }}>
+        Drag the items to the correct order for washing your hands!
+      </SubtitleText>
       {isEnded ? (
         <TotalView
           points={total}
@@ -243,7 +247,7 @@ function WashOrder(props: {
         </Btn>
         <DraxList
           data={orderData}
-          style={{ width: "100%", padding: 30, marginBottom: 30}}
+          style={{ width: "100%", padding: 30, marginBottom: 30 }}
           renderItemContent={({ item, index }) => (
             <Btn key={item.id} style={{ width: "100%" }}>
               <SubtitleText>{item.emoji}</SubtitleText>

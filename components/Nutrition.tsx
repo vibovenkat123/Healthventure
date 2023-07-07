@@ -77,8 +77,7 @@ function renderGamePage(
       return <SelectCategoryGame setPage={setPage} />;
   }
 }
-function Test(props: { test: string }) {
-}
+function Test(props: { test: string }) {}
 function Info(props: { setPage: Dispatch<React.SetStateAction<Page>> }) {
   const food_items = info.good_bad.map((item, index) => {
     return (
@@ -140,8 +139,6 @@ function Info(props: { setPage: Dispatch<React.SetStateAction<Page>> }) {
   );
 }
 
-
-
 function SelectCategoryGame(props: {
   setPage: Dispatch<React.SetStateAction<Page>>;
 }) {
@@ -176,13 +173,12 @@ function SelectCategoryGame(props: {
   }
   const categoriesView = categories.map((category, index) => {
     const [items, setItems] = useState(
-      food
-        .map((item) => {
-          return {
-            label: item.name,
-            value: item.name,
-          };
-        })
+      food.map((item) => {
+        return {
+          label: item.name,
+          value: item.name,
+        };
+      })
     );
     const [value, setValue] = useState(items[0].label);
     return (
@@ -246,7 +242,7 @@ function TotalView(props: {
     props.dairyTotal +
     props.fruitTotal;
   const increase = usePointStore((state) => state.increase);
-  increase(total)
+  increase(total);
   return (
     <View style={[styles.container, styles.bg]}>
       <Title>Score</Title>
@@ -260,14 +256,9 @@ function TotalView(props: {
       <RegularText>Protein: {props.proteinTotal.toString()}</RegularText>
       <RegularText>Grain: {props.grainTotal.toString()}</RegularText>
       <RegularText>Dairy: {props.dairyTotal.toString()}</RegularText>
-      <Btn
-          onPress={() => props.setPage(Page.INFO)}
-      >
-        <RegularText
-          accessibilityLabel="Try again"
-        >
-          Try again
-        </RegularText>
+      <RegularText>Fruit: {props.fruitTotal.toString()}</RegularText>
+      <Btn onPress={() => props.setPage(Page.INFO)}>
+        <RegularText accessibilityLabel="Try again">Try again</RegularText>
       </Btn>
     </View>
   );

@@ -1,4 +1,4 @@
-import { Pressable, View } from "react-native";
+import { View } from "react-native";
 import styles from "../styles";
 import RegularText from "./building_blocks/RegularText";
 import Title from "./building_blocks/Title";
@@ -8,7 +8,7 @@ import { usePointStore } from "../src/storage";
 export default function Home({ navigation }) {
   const points = usePointStore((state) => state.points);
   return (
-    <View style={{ ...styles.container, ...styles.bg }}>
+    <View style={[styles.container, styles.bg]}>
       <Title>Healthventure</Title>
       <RegularText style={{ marginTop: 30 }}>
         You have {points} wellness points
@@ -28,6 +28,15 @@ export default function Home({ navigation }) {
         }
       >
         <RegularText>🧼 Hygiene</RegularText>
+      </Btn>
+      <Btn
+        accessibilityLabel={"Help bob with his sickness"}
+        onPress={() => navigation.navigate("Help Bob")}
+        accessibilityHint={
+          "Help bob with his sickness, all in a choose your own adventure game"
+        }
+      >
+        <RegularText>🤒 Help Bob</RegularText>
       </Btn>
       <Btn
         accessibilityLabel={"Learn more about Healthventure"}

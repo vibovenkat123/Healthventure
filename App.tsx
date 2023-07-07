@@ -5,9 +5,8 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Hygiene from "./components/Hygiene";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import About from "./components/About";
+import Adventure from "./components/Adventure";
 const Stack = createNativeStackNavigator();
-
-
 
 export default function App() {
   return (
@@ -18,6 +17,7 @@ export default function App() {
           <Stack.Screen name={"Nutrition"} component={Nutrition} />
           <Stack.Screen name={"Hygiene"} component={Hygiene} />
           <Stack.Screen name={"About"} component={About} />
+          <Stack.Screen name={"Help Bob"} component={Adventure} />
         </Stack.Navigator>
       </NavigationContainer>
     </GestureHandlerRootView>

@@ -14,8 +14,8 @@ export const usePointStore = create<HealthventureState>()(
       reset: () => set({ points: 0 }),
     }),
     {
-      name: "healthventure-storage", 
+      name: "healthventure-storage",
       storage: createJSONStorage(() => AsyncStorage),
     }
   )
-); 
+);

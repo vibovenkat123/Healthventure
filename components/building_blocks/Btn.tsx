@@ -1,4 +1,4 @@
-import { Pressable } from "react-native";
+import { Pressable, StyleProp, ViewStyle } from "react-native";
 import styles from "../../styles";
 
 export default function Btn({
@@ -8,8 +8,8 @@ export default function Btn({
   accessibilityLabel = "",
   accessibilityHint = "",
 }: {
-  children: any;
-  style?: any;
+  children: React.ReactNode;
+  style?: StyleProp<ViewStyle>;
   onPress?: () => void;
   accessibilityLabel?: string;
   accessibilityHint?: string;
@@ -19,7 +19,7 @@ export default function Btn({
   }
   return (
     <Pressable
-      style={{ ...styles.ctaBtn, ...style }}
+      style={[styles.ctaBtn, style]}
       accessible={true}
       accessibilityLabel={accessibilityLabel}
       onPress={onPress}

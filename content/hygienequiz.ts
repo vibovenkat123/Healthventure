@@ -29,7 +29,7 @@ const quiz: Quiz = {
         { id: 3, text: "1 minute" },
       ],
       answer: 2,
-      reason: "It thoughourly cleans your teeth and gums."
+      reason: "It thoughourly cleans your teeth and gums.",
     },
     {
       question: "How many times a day should you brush your teeth?",
@@ -39,7 +39,7 @@ const quiz: Quiz = {
         { id: 3, text: "No times" },
       ],
       answer: 1,
-      reason: "It is recommended to brush your teeth twice a day."
+      reason: "It is recommended to brush your teeth twice a day.",
     },
     {
       question: "When should you use mouthwash?",
@@ -49,7 +49,7 @@ const quiz: Quiz = {
         { id: 3, text: "Instead of brushing" },
       ],
       answer: 2,
-      reason: "Mouthwashing after brushing helps strengthen your tooth enamel."
+      reason: "Mouthwashing after brushing helps strengthen your tooth enamel.",
     },
     {
       question: "Should you floss?",
@@ -59,7 +59,8 @@ const quiz: Quiz = {
         { id: 3, text: "Not at all" },
       ],
       answer: 1,
-      reason: "Flossing helps remove plaque and food particles in between your teeth."
+      reason:
+        "Flossing helps remove plaque and food particles in between your teeth.",
     },
     {
       question: "How often should you floss?",
@@ -69,7 +70,8 @@ const quiz: Quiz = {
         { id: 3, text: "Never" },
       ],
       answer: 1,
-      reason: "Plaque and other food particles accumulate in between your teeth every day, so it is recommended to floss once a day."
+      reason:
+        "Plaque and other food particles accumulate in between your teeth every day, so it is recommended to floss once a day.",
     },
     {
       question: "What is the best way to brush your teeth?",
@@ -79,7 +81,8 @@ const quiz: Quiz = {
         { id: 3, text: "Circular motions" },
       ],
       answer: 3,
-      reason: "Circular motions help to ensure you are covering all areas of your teeth and gums."
+      reason:
+        "Circular motions help to ensure you are covering all areas of your teeth and gums.",
     },
     {
       question: "How long should you use mouthwash?",
@@ -89,7 +92,8 @@ const quiz: Quiz = {
         { id: 3, text: "1 minute" },
       ],
       answer: 1,
-      reason: 'More than 30 seconds can disrupt the balance of bacteria in your mouth. '
+      reason:
+        "More than 30 seconds can disrupt the balance of bacteria in your mouth. ",
     },
   ],
   handwash: [
